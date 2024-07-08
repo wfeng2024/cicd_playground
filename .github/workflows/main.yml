@@ -13,7 +13,9 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-      - name: Comment PR with Readme content
+      - name: generate output
+        run: echo 'Hello, world!' >> output.txt
+      - name: Comment PR with Output
         uses: thollander/actions-comment-pull-request@v2
         with:
-            filePath: ./README.md
+            filePath: ./output.txt
