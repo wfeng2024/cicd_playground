@@ -9,9 +9,8 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-      - name: Run a one-line script
+      - name: Comment PR
         uses: thollander/actions-comment-pull-request@v2
         with:
           message: |
-            test
-          filePath: README.md
+            Hello world ! :wave:
