@@ -10,4 +10,10 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
       - name: Run a one-line script
-        run: cat README.md
+        uses: thollander/actions-comment-pull-request@v2
+        with:
+          message: |
+            Here is the content of the README.md file:
+            
+            $(cat README.md)
+          filePath: README.md
