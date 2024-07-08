@@ -14,7 +14,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
       - name: generate output
-        run: echo 'Hello, world!' >> output.txt
+        run: echo 'Hello, world2!' >> output.txt
       - name: Comment PR with Output
         uses: thollander/actions-comment-pull-request@v2
         with:
