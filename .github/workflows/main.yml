@@ -2,9 +2,7 @@ name: test action
 on:
     pull_request:
       branches: [main]
-      types:
-          - opened
-          - edited
+      types: [synchronize]
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -12,4 +10,4 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
       - name: Run a one-line script
-        run: ls -a
+        run: cat README.md
