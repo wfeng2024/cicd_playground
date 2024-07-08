@@ -20,4 +20,4 @@ jobs:
         with:
             filePath: ./output.txt
       - name: block test
-        run: return -1
+        run: exit 1
