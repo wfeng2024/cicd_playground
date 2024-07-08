@@ -19,5 +19,5 @@ jobs:
         uses: thollander/actions-comment-pull-request@v2
         with:
             filePath: ./output.txt
-      - name: block test
-        run: exit 1
+    #   - name: block test
+    #     run: exit 1
