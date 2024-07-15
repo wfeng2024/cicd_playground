@@ -13,4 +13,4 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Display Custom Message
-        run: echo "The custom message is: ${{ github.event.inputs.message }}"
+        run: echo "The custom message is: ${{ inputs.message }}"
