@@ -1,0 +1,16 @@
+name: Customizable Message Workflow
+
+on:
+  workflow_dispatch:
+    inputs:
+      message:
+        description: 'Custom message to display'
+        required: true
+        type: string
+
+jobs:
+  print-custom-message:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Display Custom Message
+        run: echo "The custom message is: ${{ github.event.inputs.message }}"
