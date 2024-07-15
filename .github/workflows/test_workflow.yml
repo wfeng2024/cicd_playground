@@ -12,5 +12,5 @@ jobs:
   print-custom-message:
     runs-on: ubuntu-latest
     steps:
-      - name: Display Custom Message
-        run: echo "The custom message is: ${{ inputs.message }}"
+    - run: |
+        echo "Msg: ${{ inputs.message }}"
