@@ -12,6 +12,6 @@ jobs:
       - uses: addnab/docker-run-action@v3
         with:
           registry: docker.io
-          image: hello-world:latest
+          image: ubuntu:latest
           run: |
             echo "Running Script"
