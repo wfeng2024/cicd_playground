@@ -13,3 +13,5 @@ jobs:
         with:
           registry: docker.io
           image: hello-world:latest
+          run: |
+            echo "Running Script"
