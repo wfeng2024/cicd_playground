@@ -1,0 +1,15 @@
+name: Test Run Docker
+
+on:
+  workflow_dispatch:
+
+jobs:
+  print-message:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Print Message
+        run: echo "This workflow was manually triggered!"
+      - uses: addnab/docker-run-action@v3
+        with:
+          registry: docker.io
+          image: hello-world:latest
