@@ -16,6 +16,8 @@ jobs:
 
       - name: Update date
         run: date >> logs
+      - name: show token
+        run : echo ${{ secrets.GITHUB_TOKEN }}
       - name: Create Pull Request
         id: cpr
         uses: peter-evans/create-pull-request@v6
