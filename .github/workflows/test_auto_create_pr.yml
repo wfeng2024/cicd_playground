@@ -1,0 +1,46 @@
+---
+name: auto create pr
+
+on:
+  push:
+    branches: [ "main" ]
+
+  workflow_dispatch:
+
+jobs:
+  update_image_tag:
+    runs-on: default
+    if: github.ref == 'refs/heads/main'
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Update date
+        run: date >> logs
+      - name: Create Pull Request
+        id: cpr
+        uses: peter-evans/create-pull-request@v6
+        with:
+          add-paths: "test.txt"
+          branch: github-action/update-test-txt
+          branch-suffix: random
+          delete-branch: true
+          title: "Update date [auto]"
+          commit-message: "github-action[bot] Update date"
+          body: |
+            Update date
+          labels: "automerge"
+
+      - name: Install GH CLI
+        uses: dev-hanz-ops/install-gh-cli-action@v0.1.0
+        with:
+          gh-cli-version: 2.53.0
+
+      - name: Enable Pull Request Automerge
+        run: gh pr merge "${{ steps.cpr.outputs.pull-request-number }}" --squash --auto
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # - name: Approve the PR
+      #   run: gh pr review "${{ steps.cpr.outputs.pull-request-number }}" --approve
+      #   env:
+      #     GH_TOKEN: ${{ secrets.PR_APPROVER_TOKEN }}
