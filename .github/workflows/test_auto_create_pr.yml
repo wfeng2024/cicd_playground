@@ -15,7 +15,7 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Update date
-        run: date >> logs
+        run: date >> test.txt
       - name: Create Pull Request
         id: cpr
         uses: peter-evans/create-pull-request@v6
