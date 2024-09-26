@@ -29,8 +29,8 @@ jobs:
                 invalid_files+=("$file")
             fi
           done
-          echo 'xxx'
-          echo "${invalid_files[@]}"
-          for file in $invalid_files; do
+
+          echo "Following files are invalid:"
+          for file in "${invalid_files[@]}"; do
             echo "- $file"
           done
