@@ -31,6 +31,6 @@ jobs:
           done
           echo 'xxx'
           echo $invalid_files
-          # for file in $output_array; do
-          #   echo "- $file"
-          # done
+          for file in $invalid_files; do
+            echo "- $file"
+          done
