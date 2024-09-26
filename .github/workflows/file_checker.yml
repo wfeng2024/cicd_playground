@@ -1,8 +1,11 @@
-name: Get Changed Files
+name: Check the size and type of the committed files
 
 on:
   pull_request:
     branches: [ main ]
+
+env:
+  SIZE_THRESHOLD: 1
 
 jobs:
   changed_files:
@@ -12,13 +15,49 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Get Changed Files
-        id: changed-files
+      - name: Install dependency
         run: |
-          echo "::set-output name=changed_files::$(git diff --name-only --diff-filter=MA ${{ github.event.pull_request.base.sha }}...${{ github.event.pull_request.head.sha }})"
-      - name: Display Changed Files
-          run: |
-            echo "Changed files:"
-            for file in ${{ steps.changed-files.outputs.changed_files }}; do
-              echo "- $file"
+          sudo apt update
+          sudo apt install -y file
+      - name: Check the size and type
+        id: file_check
+        run: |
+          threshold=$(($SIZE_THRESHOLD * 1024 * 1024))
+          binary_files=()
+          large_files=()
+          for file in $(git diff --name-only --diff-filter=MA ${{ github.event.pull_request.base.sha }}...${{ github.event.pull_request.head.sha }}); do
+            size=$(stat -c %s $file)
+            mime_type=$(file -b --mime-type - < "$file")
+            if [[ $mime_type != text/* ]]; then
+              binary_files+=("$file")
+            elif [[ size > threshold ]]; then
+              large_files+=("$file")
+            fi
+          done
+          should_block="false"
+          echo "# Please avoid submitting large or binary files." > tmp_comment.txt
+          if [ ${#binary_files[@]} -gt 0 ]; then
+            should_block="true"
+            echo "The following files are binary:" >> tmp_comment.txt
+            for file in "${binary_files[@]}"; do
+              echo "- $file" >> tmp_comment.txt
             done
+          fi
+          if [ ${#large_files[@]} -gt 0 ]; then
+            should_block="true"
+            echo "The following files exceed the size threshold($((threshold / 1024 / 1024)) MB):" >> tmp_comment.txt
+            for file in "${large_files[@]}"; do
+              echo "- $file" >> tmp_comment.txt
+            done
+          fi
+          echo "should_block=$should_block"
+          echo "should_block=$should_block" >> $GITHUB_OUTPUT
+      - name: Comment invalid file on PR
+        if: steps.file_check.outputs.should_block == 'true'
+        uses: thollander/actions-comment-pull-request@v2
+        with:
+          filePath: tmp_comment.txt
+      - name: Block PR
+        if: steps.file_check.outputs.should_block == 'true'
+        run: |
+          exit 1
