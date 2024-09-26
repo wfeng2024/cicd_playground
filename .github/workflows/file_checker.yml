@@ -30,6 +30,7 @@ jobs:
             fi
           done
           echo 'xxx'
-          for file in $output_array; do
-            echo "- $file"
-          done
+          echo $output_array
+          # for file in $output_array; do
+          #   echo "- $file"
+          # done
