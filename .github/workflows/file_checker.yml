@@ -17,8 +17,8 @@ jobs:
         run: |
           echo "::set-output name=changed_files::$(git diff --name-only --diff-filter=MA ${{ github.event.pull_request.base.sha }}...${{ github.event.pull_request.head.sha }})"
       - name: Display Changed Files
-          run: |
-            echo "Changed files:"
-            for file in ${{ steps.changed-files.outputs.changed_files }}; do
-              echo "- $file"
-            done
+        run: |
+          echo "Changed files:"
+          for file in ${{ steps.changed-files.outputs.changed_files }}; do
+            echo "- $file"
+          done
