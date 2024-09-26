@@ -14,8 +14,8 @@ jobs:
 
       - name: Install dependency
         run: |
-          apt update
-          apt install file
+          sudo apt update
+          sodu apt install -y file
       - name: Display Changed Files
         run: |
           # Convert 10MB to bytes
