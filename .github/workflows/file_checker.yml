@@ -12,13 +12,10 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Get Changed Files
-        id: changed-files
-        run: |
-          echo "changed_files='$(git diff --name-only --diff-filter=MA ${{ github.event.pull_request.base.sha }}...${{ github.event.pull_request.head.sha }})'">> $GITHUB_OUTPUT
+      
       - name: Display Changed Files
         run: |
           echo "Changed files:"
-          for file in ${{ steps.changed-files.outputs.changed_files }}; do
+          for file in $(git diff --name-only --diff-filter=MA ${{ github.event.pull_request.base.sha }}...${{ github.event.pull_request.head.sha }}); do
             echo "- $file"
           done
