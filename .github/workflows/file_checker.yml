@@ -26,12 +26,11 @@ jobs:
             echo "- size: $size"
             # Check if the file is larger than 10MB
             if (( size < threshold )); then
-                echo "xxx $file"
                 invalid_files+=("$file")
             fi
           done
           echo 'xxx'
-          echo $invalid_files
-          for file in invalid_files; do
+          echo "${invalid_files[@]}"
+          for file in $invalid_files; do
             echo "- $file"
           done
