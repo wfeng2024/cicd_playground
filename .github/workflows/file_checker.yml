@@ -32,17 +32,17 @@ jobs:
               large_files+=("$file")
             fi
           done
-          shoud_block="false"
+          should_block="false"
           echo "Please avoid submitting large or binary files." > tmp_comment.txt
           if [ ${#binary_files[@]} -gt 0 ]; then
-            shoud_block="true"
+            should_block="true"
             echo "The following files are binary:" >> tmp_comment.txt
             for file in "${binary_files[@]}"; do
               echo "- $file" >> tmp_comment.txt
             done
           fi
           if [ ${#large_files[@]} -gt 0 ]; then
-            shoud_block="true"
+            should_block="true"
             echo "The following files exceed the size threshold($((threshold / 1024 / 1024)) MB):" >> tmp_comment.txt
             for file in "${large_files[@]}"; do
               echo "- $file" >> tmp_comment.txt
