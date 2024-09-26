@@ -48,8 +48,8 @@ jobs:
               echo "- $file" >> tmp_comment.txt
             done
           fi
-          cat tmp_comment.txt
-          echo "{should_block}={$should_block}" >> $GITHUB_OUTPUT
+          echo "should_block={should_block}"
+          echo "should_block={should_block}" >> $GITHUB_OUTPUT
       - name: Comment invalid file on PR
         if: steps.file_check.outputs.should_block == 'true'
         uses: thollander/actions-comment-pull-request@v2
