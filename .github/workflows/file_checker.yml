@@ -1,8 +1,11 @@
-name: Get Changed Files
+name: Check the size and type of the committed files
 
 on:
   pull_request:
     branches: [ main ]
+
+env:
+  SIZE_THRESHOLD: 1
 
 jobs:
   changed_files:
@@ -16,11 +19,10 @@ jobs:
         run: |
           sudo apt update
           sudo apt install -y file
-      - name: Display Changed Files
+      - name: Check the size and type
         id: file_check
         run: |
-          # threshold is 1MB
-          threshold=$((1 * 1024 * 1024))
+          threshold=$(($SIZE_THRESHOLD * 1024 * 1024))
           binary_files=()
           large_files=()
           for file in $(git diff --name-only --diff-filter=MA ${{ github.event.pull_request.base.sha }}...${{ github.event.pull_request.head.sha }}); do
