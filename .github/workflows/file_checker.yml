@@ -30,7 +30,7 @@ jobs:
             mime_type=$(file -b --mime-type - < "$file")
             if [[ $mime_type != text/* ]]; then
               binary_files+=("$file")
-            elif [[ size < threshold ]]; then
+            elif [[ size > threshold ]]; then
               large_files+=("$file")
             fi
           done
