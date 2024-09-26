@@ -23,13 +23,13 @@ jobs:
             echo "$file:"
             # Get file size in bytes
             size=$(stat -c %s $file)
-            echo "size: $size"
+            echo "- size: $size"
             # Check if the file is larger than 10MB
             if (( size < threshold )); then
                 output_array+=("$file")
             fi
           done
           echo 'xxx'
-          for file in output_array; do
+          for file in $output_array; do
             echo "- $file"
           done
