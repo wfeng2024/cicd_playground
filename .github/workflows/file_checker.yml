@@ -55,3 +55,7 @@ jobs:
         uses: thollander/actions-comment-pull-request@v2
         with:
           filePath: tmp_comment.txt
+      - name: Block PR
+        if: steps.file_check.outputs.should_block == 'true'
+        run: |
+          exit 1
