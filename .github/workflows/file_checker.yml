@@ -31,6 +31,8 @@ jobs:
             if [[ $mime_type != text/* ]]; then
               binary_files+=("$file")
             elif [[ size > threshold ]]; then
+              echo size
+              echo threshold
               large_files+=("$file")
             fi
           done
