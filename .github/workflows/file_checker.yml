@@ -17,26 +17,40 @@ jobs:
           sudo apt update
           sudo apt install -y file
       - name: Display Changed Files
+        id: file_check
         run: |
-          # Convert 10MB to bytes
-          threshold=$((10 * 1024 * 1024))
-          invalid_files=()
-          echo "checking files:"
+          # threshold is 1MB
+          threshold=$((1 * 1024 * 1024))
+          binary_files=()
+          large_files=()
           for file in $(git diff --name-only --diff-filter=MA ${{ github.event.pull_request.base.sha }}...${{ github.event.pull_request.head.sha }}); do
-            echo "$file:"
-            # Get file size in bytes
             size=$(stat -c %s $file)
             mime_type=$(file -b --mime-type - < "$file")
-            echo $mime_type
-            # Check if the file is larger than 10MB
             if [[ $mime_type != text/* ]]; then
-              invalid_files+=("$file")
+              binary_files+=("$file")
             elif [[ size < threshold ]]; then
-              invalid_files+=("$file")
+              large_files+=("$file")
             fi
           done
-
-          echo "Following files are invalid:"
-          for file in "${invalid_files[@]}"; do
-            echo "- $file"
-          done
+          shoud_block="false"
+          echo "Please avoid submitting large or binary files." > tmp_comment.txt
+          if [ ${#binary_files[@]} -gt 0 ]; then
+            shoud_block="true"
+            echo "The following files are binary:" >> tmp_comment.txt
+            for file in "${binary_files[@]}"; do
+              echo "- $file" >> tmp_comment.txt
+            done
+          fi
+          if [ ${#large_files[@]} -gt 0 ]; then
+            shoud_block="true"
+            echo "The following files exceed the size threshold($((threshold / 1024 / 1024)) MB):" >> tmp_comment.txt
+            for file in "${large_files[@]}"; do
+              echo "- $file" >> tmp_comment.txt
+            done
+          fi
+          echo ::set-output::should_block::$should_block
+      - name: Comment invalid file on PR
+        if: steps.file_check.outputs.should_block == 'true'
+        uses: thollander/actions-comment-pull-request@v2
+        with:
+          filePath: tmp_comment.txt
