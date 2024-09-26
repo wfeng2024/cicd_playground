@@ -12,7 +12,10 @@ jobs:
         with:
           fetch-depth: 0
 
-      
+      - name: Install dependency
+        run: |
+          apt update
+          apt install file
       - name: Display Changed Files
         run: |
           # Convert 10MB to bytes
@@ -23,10 +26,13 @@ jobs:
             echo "$file:"
             # Get file size in bytes
             size=$(stat -c %s $file)
-            echo "- size: $size"
+            mime_type=$(file -b --mime-type - < "$file")
+            echo $mime_type
             # Check if the file is larger than 10MB
             if (( size < threshold )); then
-                invalid_files+=("$file")
+              invalid_files+=("$file")
+            elif [[ $mime_type != text/* ]]; then
+              invalid_files+=("$file")
             fi
           done
 
