@@ -23,7 +23,7 @@ jobs:
           for file in $(git diff --name-only --diff-filter=MA ${{ github.event.pull_request.base.sha }}...${{ github.event.pull_request.head.sha }}); do
             echo "- $file"
             # Get file size in bytes
-            size=$(stat -f %z "$file")
+            size=$(stat -f %z $file)
             
             # Check if the file is larger than 10MB
             if (( size > threshold )); then
