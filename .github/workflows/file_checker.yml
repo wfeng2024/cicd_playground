@@ -15,7 +15,22 @@ jobs:
       
       - name: Display Changed Files
         run: |
-          echo "Changed files:"
+          # Convert 10MB to bytes
+          threshold=$((10 * 1024 * 1024))
+
+          declare -a output_array
+          echo "checking files:"
           for file in $(git diff --name-only --diff-filter=MA ${{ github.event.pull_request.base.sha }}...${{ github.event.pull_request.head.sha }}); do
+            echo "- $file"
+            # Get file size in bytes
+            size=$(stat -f %z "$file")
+            
+            # Check if the file is larger than 10MB
+            if (( size > threshold )); then
+                output_array+=("$file")
+            fi
+          done
+          echo 'xxx'
+          for file in output_array; do
             echo "- $file"
           done
