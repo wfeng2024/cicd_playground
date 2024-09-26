@@ -20,12 +20,12 @@ jobs:
           declare -a output_array
           echo "checking files:"
           for file in $(git diff --name-only --diff-filter=MA ${{ github.event.pull_request.base.sha }}...${{ github.event.pull_request.head.sha }}); do
-            echo "- $file"
+            echo "$file:"
             # Get file size in bytes
             size=$(stat -c %s $file)
-            
+            echo "size: $size"
             # Check if the file is larger than 10MB
-            if (( size > threshold )); then
+            if (( size < threshold )); then
                 output_array+=("$file")
             fi
           done
