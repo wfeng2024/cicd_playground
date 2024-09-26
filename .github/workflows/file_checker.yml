@@ -17,9 +17,6 @@ jobs:
         run: |
           # Convert 10MB to bytes
           threshold=$((10 * 1024 * 1024))
-          pwd
-          ls
-          stat -f %z 1.txt
           declare -a output_array
           echo "checking files:"
           for file in $(git diff --name-only --diff-filter=MA ${{ github.event.pull_request.base.sha }}...${{ github.event.pull_request.head.sha }}); do
