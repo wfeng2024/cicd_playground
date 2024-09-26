@@ -35,7 +35,7 @@ jobs:
             fi
           done
           should_block="false"
-          echo "# Please avoid submitting large or binary files." > tmp_comment.txt
+          echo "## Please avoid submitting large or binary files." > tmp_comment.txt
           if [ ${#binary_files[@]} -gt 0 ]; then
             should_block="true"
             echo "The following files are binary:" >> tmp_comment.txt
