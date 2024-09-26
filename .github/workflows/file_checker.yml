@@ -23,16 +23,16 @@ jobs:
         id: file_check
         run: |
           threshold=$(($SIZE_THRESHOLD * 1024 * 1024))
+          echo $threshold
           binary_files=()
           large_files=()
           for file in $(git diff --name-only --diff-filter=MA ${{ github.event.pull_request.base.sha }}...${{ github.event.pull_request.head.sha }}); do
             size=$(stat -c %s $file)
             mime_type=$(file -b --mime-type - < "$file")
+            echo $size
             if [[ $mime_type != text/* ]]; then
               binary_files+=("$file")
             elif [[ size > threshold ]]; then
-              echo size
-              echo threshold
               large_files+=("$file")
             fi
           done
