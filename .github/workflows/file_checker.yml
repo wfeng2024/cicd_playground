@@ -30,12 +30,12 @@ jobs:
             mime_type=$(file -b --mime-type - < "$file")
             if [[ $mime_type != text/* ]]; then
               binary_files+=("$file")
-            elif [[ size > threshold ]]; then
+            elif [[ size < threshold ]]; then
               large_files+=("$file")
             fi
           done
           should_block="false"
-          echo "Please avoid submitting large or binary files." > tmp_comment.txt
+          echo "# Please avoid submitting large or binary files." > tmp_comment.txt
           if [ ${#binary_files[@]} -gt 0 ]; then
             should_block="true"
             echo "The following files are binary:" >> tmp_comment.txt
