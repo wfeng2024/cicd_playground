@@ -30,18 +30,19 @@ jobs:
             mime_type=$(file -b --mime-type - < "$file")
             if [[ $mime_type != text/* ]]; then
               binary_files+=("$file")
-            elif [[ size > threshold ]]; then
+            elif (( size > threshold )); then
               large_files+=("$file")
             fi
           done
           should_block="false"
-          echo "# Please avoid submitting large or binary files." > tmp_comment.txt
+          echo "## Please avoid submitting large or binary files." > tmp_comment.txt
           if [ ${#binary_files[@]} -gt 0 ]; then
             should_block="true"
             echo "The following files are binary:" >> tmp_comment.txt
             for file in "${binary_files[@]}"; do
               echo "- $file" >> tmp_comment.txt
             done
+            echo "" >> tmp_comment.txt
           fi
           if [ ${#large_files[@]} -gt 0 ]; then
             should_block="true"
@@ -50,7 +51,6 @@ jobs:
               echo "- $file" >> tmp_comment.txt
             done
           fi
-          echo "should_block=$should_block"
           echo "should_block=$should_block" >> $GITHUB_OUTPUT
       - name: Comment invalid file on PR
         if: steps.file_check.outputs.should_block == 'true'
