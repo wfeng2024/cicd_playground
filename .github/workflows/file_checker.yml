@@ -29,11 +29,9 @@ jobs:
           for file in $(git diff --name-only --diff-filter=MA ${{ github.event.pull_request.base.sha }}...${{ github.event.pull_request.head.sha }}); do
             size=$(stat -c %s $file)
             mime_type=$(file -b --mime-type - < "$file")
-            echo $size $threshold
             if [[ $mime_type != text/* ]]; then
               binary_files+=("$file")
             elif (( size > threshold )); then
-              echo "trigger"
               large_files+=("$file")
             fi
           done
@@ -45,6 +43,7 @@ jobs:
             for file in "${binary_files[@]}"; do
               echo "- $file" >> tmp_comment.txt
             done
+            echo "" >> tmp_comment.txt
           fi
           if [ ${#large_files[@]} -gt 0 ]; then
             should_block="true"
