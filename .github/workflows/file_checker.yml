@@ -32,7 +32,7 @@ jobs:
             echo $size $threshold
             if [[ $mime_type != text/* ]]; then
               binary_files+=("$file")
-            elif [[ size > threshold ]]; then
+            elif (( size > threshold )); then
               echo "trigger"
               large_files+=("$file")
             fi
